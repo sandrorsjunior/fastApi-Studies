@@ -6,8 +6,6 @@ class Base(DeclarativeBase):
 
 engine = create_engine('sqlite:///fast_start.db')
 
-Base.metadata.create_all(bind=engine)
-
 
 sessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

@@ -1,3 +1,4 @@
+import uuid
 from pydantic import BaseModel, EmailStr
 
 class CreateUserSchema(BaseModel):
@@ -5,7 +6,7 @@ class CreateUserSchema(BaseModel):
     email: EmailStr
 
 class ReadUserSchema(BaseModel):
-    id: int
+    id: uuid.UUID
     name: str
     email: EmailStr
 

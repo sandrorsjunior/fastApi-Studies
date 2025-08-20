@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from ..controller.DTO.UserDTO import ReadUserSchema, CreateUserSchema
-from ..database import User
+from ..model.UserModel import UserModel
 from ..config.database import get_db
 
 router = APIRouter(
@@ -11,12 +11,12 @@ router = APIRouter(
 
 @router.get('/')
 def read_users(db: Session = Depends(get_db)) -> list[ReadUserSchema]:
-    users = db.query(User).all()
+    users = db.query(UserModel).all()
     return users
 
 @router.post('/', response_model=ReadUserSchema)
 def add_new_user(newUser: CreateUserSchema, db: Session = Depends(get_db)):
-    db_user = User(**newUser.model_dump())
+    db_user = UserModel(**newUser.model_dump())
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
