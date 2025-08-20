@@ -9,12 +9,12 @@ router = APIRouter(
     tags=["users"]    # Grouping for docs
 )
 
-@router.get('/users')
+@router.get('/')
 def read_users(db: Session = Depends(get_db)) -> list[ReadUserSchema]:
     users = db.query(User).all()
     return users
 
-@router.post('/users', response_model=ReadUserSchema)
+@router.post('/', response_model=ReadUserSchema)
 def add_new_user(newUser: CreateUserSchema, db: Session = Depends(get_db)):
     db_user = User(**newUser.model_dump())
     db.add(db_user)
