@@ -1,3 +1,4 @@
+import uuid
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from ..controller.DTO.UserDTO import ReadUserSchema, CreateUserSchema
@@ -22,9 +23,25 @@ class UserController:
                                   methods=["POST"], 
                                   response_model=ReadUserSchema
                                   )
+        self.router.add_api_route("/{user_id}", 
+                                  self.update_user, 
+                                  methods=["PUT"], 
+                                  response_model=ReadUserSchema
+                                  )
+        self.router.add_api_route("/{user_id}", 
+                                  self.get_user_by_id, 
+                                  methods=["GET"], 
+                                  response_model=ReadUserSchema
+                                  )
 
     def read_users(self, user_service: UserService = Depends(UserService)):
         return user_service.get_all_users()
+    
+    def get_user_by_id(self, user_id: str, user_service: UserService = Depends(UserService)):
+        return user_service.get_user_by_id(user_id)
 
     def add_new_user(self, newUser: CreateUserSchema, user_service: UserService = Depends(UserService)):
-        return user_service.create_user(newUser)
+        return user_service.save_user(newUser)
+    
+    def update_user(self, user_id: str, updated_data: CreateUserSchema, user_service: UserService = Depends(UserService)):
+        return user_service.update_user(user_id, updated_data) 
