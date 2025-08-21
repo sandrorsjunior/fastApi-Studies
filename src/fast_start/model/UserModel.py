@@ -11,5 +11,5 @@ class UserModel(Base):
         primary_key=True, 
         default=lambda: str(uuid.uuid4())
         )
-    name:Mapped[str] = mapped_column(nullable=False, unique=True)
-    email:Mapped[str] = mapped_column(nullable=False, unique=True)
+    name:Mapped[str] = mapped_column(nullable=False, unique=False)
+    email:Mapped[str] = mapped_column(nullable=False, unique=False)
