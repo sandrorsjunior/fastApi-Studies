@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 import uuid
 
+from ..repository.UserRepository import UserRepository
+
 from ..config.database import get_db
 from ..validations.UserValidation import UserValidation
 from ..model.UserModel import UserModel
@@ -9,9 +11,11 @@ from fastapi import Depends, HTTPException
 
 class UserService:
     def __init__(self, db: Session = Depends(get_db), 
+                 user_repository: UserRepository = Depends(UserRepository),
                  validations: UserValidation = Depends(UserValidation)
                  ):
         self.db = db
+        self.user_repository = user_repository
         self.validations = validations
 
     def get_all_users(self) -> list[ReadUserSchema]:
@@ -24,9 +28,7 @@ class UserService:
     def save_user(self, user_data: CreateUserSchema) -> UserModel:
         self.validations.duoplicated_name_check(user_data)
         new_user = UserModel(**user_data.model_dump())
-        self.db.add(new_user)
-        self.db.commit()
-        self.db.refresh(new_user)
+        self.user_repository.save(new_user)
         return new_user
 
     def update_user(self, user_id: str, user_data: CreateUserSchema) -> UserModel:
