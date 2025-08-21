@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 import uuid
 
+from ..config.repository import get_user_repository
+
 from ..repository.UserRepository import UserRepository
 
 from ..config.database import get_db
@@ -11,7 +13,7 @@ from fastapi import Depends, HTTPException
 
 class UserService:
     def __init__(self, db: Session = Depends(get_db), 
-                 user_repository: UserRepository = Depends(UserRepository),
+                 user_repository: UserRepository = Depends(get_user_repository),
                  validations: UserValidation = Depends(UserValidation)
                  ):
         self.db = db
@@ -19,10 +21,10 @@ class UserService:
         self.validations = validations
 
     def get_all_users(self) -> list[ReadUserSchema]:
-        return self.db.query(UserModel).all()
+        return self.user_repository.find_all()
 
     def get_user_by_id(self, user_id: str) -> UserModel | None:
-        return self.db.query(UserModel).filter(UserModel.id == user_id).first()
+        return self.user_repository.find_by_id(user_id)
 
 
     def save_user(self, user_data: CreateUserSchema) -> UserModel:
@@ -36,9 +38,16 @@ class UserService:
         if user:
             user.name = user_data.name
             user.email = user_data.email
-            self.db.commit()
-            self.db.refresh(user)
+            self.user_repository.save(user)
             return user
         else:
             raise HTTPException(status_code=404, detail="User not found")
 
+
+    def delete_user(self, user_id: str) -> str:
+        user = self.get_user_by_id(user_id)
+        if user:
+            self.user_repository.delete(user)
+            return user.id
+        else:
+            raise HTTPException(status_code=404, detail="User not found")
