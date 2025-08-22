@@ -12,11 +12,11 @@ from ..controller.DTO.UserDTO import ReadUserSchema, CreateUserSchema
 from fastapi import Depends, HTTPException
 
 class UserService:
-    def __init__(self, db: Session = Depends(get_db), 
+    def __init__(self,
                  user_repository: UserRepository = Depends(get_user_repository),
                  validations: UserValidation = Depends(UserValidation)
                  ):
-        self.db = db
+
         self.user_repository = user_repository
         self.validations = validations
 
@@ -24,8 +24,10 @@ class UserService:
         return self.user_repository.find_all()
 
     def get_user_by_id(self, user_id: str) -> UserModel | None:
-        return self.user_repository.find_by_id(user_id)
-
+        user = self.user_repository.find_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        return user
 
     def save_user(self, user_data: CreateUserSchema) -> UserModel:
         self.validations.duoplicated_name_check(user_data)

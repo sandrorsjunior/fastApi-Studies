@@ -18,6 +18,11 @@ class UserController:
                                   methods=["GET"], 
                                   response_model=list[ReadUserSchema]
                                   )
+        self.router.add_api_route("/{user_id}", 
+                                  self.get_user_by_id, 
+                                  methods=["GET"], 
+                                  response_model=ReadUserSchema
+                                  )
         self.router.add_api_route("/", 
                                   self.add_new_user, 
                                   methods=["POST"], 
@@ -29,9 +34,9 @@ class UserController:
                                   response_model=ReadUserSchema
                                   )
         self.router.add_api_route("/{user_id}", 
-                                  self.get_user_by_id, 
-                                  methods=["GET"], 
-                                  response_model=ReadUserSchema
+                                  self.delete_user, 
+                                  methods=["DELETE"], 
+                                  response_model=str
                                   )
 
     def read_users(self, user_service: UserService = Depends(UserService)):
@@ -45,3 +50,5 @@ class UserController:
     
     def update_user(self, user_id: str, updated_data: CreateUserSchema, user_service: UserService = Depends(UserService)):
         return user_service.update_user(user_id, updated_data) 
+    def delete_user(self, user_id: str, user_service: UserService = Depends(UserService)):
+        return user_service.delete_user(user_id)
