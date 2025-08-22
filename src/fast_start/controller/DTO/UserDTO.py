@@ -11,6 +11,7 @@ class ReadUserSchema(BaseModel):
     id: uuid.UUID
     name: str
     email: EmailStr
+    files: list[UserFileDTO]
 
     class Config:
         orm_mode = True  # Allows Pydantic to work with SQLAlchemy objects

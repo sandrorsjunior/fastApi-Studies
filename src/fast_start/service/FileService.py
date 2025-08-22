@@ -17,11 +17,12 @@ class FileService:
         self.db = db
         self.userMetaDataRepository = userMetaDataRepository
 
-    def save_file(self, file_metadata: UploadFile) -> UserFileModel:
+    def save_file(self, file_metadata: UploadFile, user_id: str) -> UserFileModel:
         file_model = UserFileModel(
             file_name=file_metadata.filename,
             file_path=f"./uploads/{file_metadata.filename}",
-            file_type=file_metadata.content_type
+            file_type=file_metadata.content_type,
+            user_id=user_id
         )
         try:
             with open(file_model.file_path, "wb") as buffer:
@@ -31,3 +32,6 @@ class FileService:
 
         self.userMetaDataRepository.save(file_model)
         return file_model
+
+    def get_all_user_files(self) -> list[UserFileModel]:
+        return self.userMetaDataRepository.find_all()

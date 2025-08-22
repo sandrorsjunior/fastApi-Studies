@@ -1,4 +1,4 @@
-from sqlalchemy import String
+from sqlalchemy import ForeignKey, String
 from ..config.database import Base
 from sqlalchemy.orm import Mapped, mapped_column, Relationship
 import uuid
@@ -11,3 +11,5 @@ class UserFileModel(Base):
     file_path: Mapped[str] = mapped_column(String, nullable=False, unique=False)
     file_type: Mapped[str] = mapped_column(String, nullable=False, unique=False)
     file_name: Mapped[str] = mapped_column(String, nullable=False, unique=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
+    user: Mapped[UserModel] = Relationship(back_populates="files")
