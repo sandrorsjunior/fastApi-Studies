@@ -1,0 +1,12 @@
+Dear Hiring Manager,
+
+I am excited to apply for the Software Developer position at Moonlake Technologies. With a solid background in data analysis, software development, and robotics, I bring a unique multidisciplinary perspective and a strong drive for innovation and continuous learning.
+
+My professional experience includes nearly four years at Ford Brazil, where I contributed to data analytics and automation projects using Python, PySpark, and cloud platforms. Alongside this, I have a solid academic foundation in statistics and robotics, currently being pursued at the Polytechnic Institute of Cávado and Ave (IPCA) in Portugal. I also possess hands-on experience with Java, Spring Boot, and C#/.NET, which aligns well with Moonlake’s technology stack.
+
+I am passionate about developing scalable and efficient software solutions and eager to contribute my analytical skills and programming expertise to your team. My disciplined, curious, and collaborative approach will help me thrive in Moonlake’s innovative environment.
+
+Thank you for considering my application. I look forward to the opportunity to discuss how I can contribute to Moonlake’s continued success.
+
+Sincerely,
+Sandro Junior

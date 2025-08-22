@@ -7,7 +7,7 @@ from ..controller.DTO.UserDTO import CreateUserSchema
 ID = TypeVar('ID')
 T = TypeVar('T')
 class BaseRepository(Generic[T, ID]):
-    def __init__(self, model:Type[T], db: Session = Depends(get_db)):
+    def __init__(self, model:Type[T], db: Session):
         self.db = db
         self.model = model
 

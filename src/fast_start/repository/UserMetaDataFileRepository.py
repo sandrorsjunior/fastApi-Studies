@@ -6,5 +6,5 @@ from ..config.database import get_db
 
 
 class UserMetaDataFileRepository(BaseRepository[UserFileModel, str]):
-    def __ini__(self, db: Session = Depends(get_db)):
+    def __init__(self, db: Session):
         super().__init__(UserFileModel, db)

@@ -6,5 +6,5 @@ from ..repository.BaseRepository import BaseRepository
 from sqlalchemy.orm import Session
 
 class UserRepository(BaseRepository[UserModel, str]):
-    def __init__(self, db: Session = Depends(get_db)):
+    def __init__(self, db: Session):
         super().__init__(UserModel,db)
