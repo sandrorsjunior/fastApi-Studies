@@ -2,7 +2,6 @@ from pydantic import BaseModel
 
 class UserFileDTO(BaseModel):
     id: str
-    user_id: str
     file_name: str
     file_path: str
 
