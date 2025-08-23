@@ -4,20 +4,27 @@ import uuid
 from ..model.UserFileModel import UserFileModel
 
 from ..controller.DTO.UserFileDTO import UserFileDTO
-from ..config.repository import get_user_meta_data_repository
+from ..config.repository import get_user_meta_data_repository, get_user_repository
 from ..repository.UserMetaDataFileRepository import UserMetaDataFileRepository
+from ..repository.UserRepository import UserRepository
 from ..config.database import get_db
 from fastapi import Depends, HTTPException, UploadFile, File
 
 class FileService:
     def __init__(self, 
                  db: Session = Depends(get_db), 
-                 userMetaDataRepository: UserMetaDataFileRepository = Depends(get_user_meta_data_repository)
+                 userMetaDataRepository: UserMetaDataFileRepository = Depends(get_user_meta_data_repository),
+                 userRepository: UserRepository = Depends(get_user_repository)
                  ):
         self.db = db
         self.userMetaDataRepository = userMetaDataRepository
+        self.userRepository = userRepository
 
     def save_file(self, file_metadata: UploadFile, user_id: str) -> UserFileModel:
+        have_user = self.userRepository.find_by_id(user_id)
+        if not have_user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
         file_model = UserFileModel(
             file_name=file_metadata.filename,
             file_path=f"./uploads/{file_metadata.filename}",
