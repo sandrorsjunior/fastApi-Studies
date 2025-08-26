@@ -1,14 +1,8 @@
-import uuid
-from fastapi import APIRouter, Depends, UploadFile
-from fastapi.params import File
-from sqlalchemy.orm import Session
-
-from ..service.FileService import FileService
+from fastapi import APIRouter, Depends
 from ..controller.DTO.UserDTO import ReadUserSchema, CreateUserSchema
 from ..model.UserModel import UserModel
-from ..config.database import get_db
 from ..service.UserService import UserService
-
+from ..auth.Security import Security
 
 class UserController:
     def __init__(self):
@@ -42,7 +36,16 @@ class UserController:
                                   response_model=str
                                   )
 
-    def read_users(self, user_service: UserService = Depends(UserService)):
+    def read_users(self, 
+                   user_service: UserService = Depends(UserService),
+                   current_user: UserModel = Depends(Security.check_token)
+                   ):
+        if current_user is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid authentication credentials",
+                headers={"WWW-Authenticate": "Bearer"}
+            )
         return user_service.get_all_users()
     
     def get_user_by_id(self, user_id: str, user_service: UserService = Depends(UserService)):
