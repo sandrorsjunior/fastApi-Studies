@@ -1,5 +1,4 @@
-from sqlalchemy.orm import Session
-import uuid
+from ..auth.Security import Security
 
 from ..config.repository import get_user_repository
 
@@ -31,7 +30,9 @@ class UserService:
 
     def save_user(self, user_data: CreateUserSchema) -> UserModel:
         self.validations.duoplicated_name_check(user_data)
-        new_user = UserModel(**user_data.model_dump())
+        user_data = user_data.model_dump()
+        user_data["password"] = Security.encrypt_password(user_data["password"])
+        new_user = UserModel(**user_data)
         self.user_repository.save(new_user)
         return new_user
 
