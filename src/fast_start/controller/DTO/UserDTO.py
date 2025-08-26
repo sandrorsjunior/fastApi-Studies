@@ -6,12 +6,12 @@ from .UserFileDTO import UserFileDTO
 class CreateUserSchema(BaseModel):
     name: str
     email: EmailStr
-
+    password: str
+    
 class ReadUserSchema(BaseModel):
     id: uuid.UUID
     name: str
     email: EmailStr
-    password: str
     files: list[UserFileDTO]
 
     class Config:
